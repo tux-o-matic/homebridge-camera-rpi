@@ -183,8 +183,8 @@ Camera.prototype.handleStreamRequest = function (request) {
     let ssrc = this.pendingSessions[sessionIdentifier]['video_ssrc']
 
     let ffmpegCommand = `\
--vcodec h264_omx -pix_fmt yuv420p -r ${fps} -f rawvideo -tune zerolatency \
--video_size ${width}x${height} -framerate ${fps} -i /dev/video0 \
+-f video4linux2 -input_format h264 -video_size ${width}x${height} -framerate ${fps} -i /dev/video0 \
+--vcodec h264_omx -pix_fmt yuv420p -tune zerolatency -an -payload_type 99 -ssrc ${ssrc} -f rtp \
 -an -payload_type 99 -ssrc ${ssrc} \
 -srtp_out_suite AES_CM_128_HMAC_SHA1_80 -srtp_out_params ${srtp} \
 srtp://${address}:${port}?rtcpport=${port}&localrtcpport=${port}&pkt_size=1378`
